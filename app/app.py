@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+"""
+This is a Flask application that provides an API for managing Heroes and Powers.
+"""
 
 from models import db, Hero, Power, HeroPower
 # import os
@@ -31,7 +33,17 @@ api = Api(app)
 
 
 class Heroes(Resource):
+    """
+    Resource for retrieving a list of heroes.
+    """
+
     def get(self):
+        """
+        Get a list of all heroes.
+
+        Returns:
+            list: A list of hero data.
+        """
         heroes = Hero.query.all()
 
         heroes_data = []
@@ -50,7 +62,20 @@ api.add_resource(Heroes, '/heroes')
 
 
 class HeroesByID(Resource):
+    """
+    Resource for retrieving hero details by ID.
+    """
+
     def get(self, num):
+        """
+        Get details of a hero by ID.
+
+        Args:
+            num (int): The ID of the hero to retrieve.
+
+        Returns:
+            dict: A dictionary containing hero details.
+        """
         hero = Hero.query.filter(Hero.id == num).first()
 
         if hero:
@@ -79,7 +104,17 @@ api.add_resource(HeroesByID, '/heroes/<int:num>')
 
 
 class Powers(Resource):
+    """
+    Resource for retrieving a list of powers.
+    """
+
     def get(self):
+        """
+        Get a list of all powers.
+
+        Returns:
+            list: A list of power data.
+        """
         powers = Power.query.all()
 
         powers_data = []
@@ -98,7 +133,20 @@ api.add_resource(Powers, '/powers')
 
 
 class PowersByID(Resource):
+    """
+    Resource for retrieving power details by ID and updating powers.
+    """
+
     def get(self, num):
+        """
+        Get details of a power by ID.
+
+        Args:
+            num (int): The ID of the power to retrieve.
+
+        Returns:
+            dict: A dictionary containing power details.
+        """
         power = Power.query.filter(Power.id == num).first()
 
         if power:
@@ -115,6 +163,15 @@ class PowersByID(Resource):
         }, 404
 
     def patch(self, num):
+        """
+        Update power details by ID.
+
+        Args:
+            num (int): The ID of the power to update.
+
+        Returns:
+            dict: A dictionary containing updated power details.
+        """
         power = Power.query.filter(Power.id == num).first()
 
         data = request.get_json()
@@ -132,22 +189,32 @@ class PowersByID(Resource):
                 "description": power.description
             }
 
-            return  response_body, 201
+            return response_body, 201
 
         return {
             "error": "Power not found"
-            }, 400
+        }, 400
 
 
 api.add_resource(PowersByID, '/powers/<int:num>')
 
 
 class HeroPowers(Resource):
+    """
+    Resource for creating HeroPower relationships.
+    """
+
     def post(self):
+        """
+        Create a new HeroPower relationship.
+
+        Returns:
+            dict: A dictionary containing hero details with the new HeroPower.
+        """
         data = request.get_json()
 
         hero = Hero.query.filter(Hero.id == data['hero_id']).first()
-        power =Power.query.filter(Power.id == data['power_id']).first()
+        power = Power.query.filter(Power.id == data['power_id']).first()
 
         if not hero or not power:
             return {
@@ -155,9 +222,9 @@ class HeroPowers(Resource):
             }, 404
 
         new_hero_power = HeroPower(
-            strength = data['strength'],
-            power_id = data['power_id'],
-            hero_id = data['hero_id']
+            strength=data['strength'],
+            power_id=data['power_id'],
+            hero_id=data['hero_id']
         )
 
         db.session.add(new_hero_power)

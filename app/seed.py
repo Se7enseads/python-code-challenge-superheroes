@@ -1,11 +1,14 @@
-from models import db, Hero, HeroPower, Power
-
-from faker import Faker
+"""
+Populates the database with random Hero, Power, and HeroPower data.
+"""
 
 import random
+from faker import Faker
+from models import db, Hero, HeroPower, Power
+
 from app import app
 
-
+# List of hero names and powers
 hero_names = [
     "Superhero1",
     "Superhero2",
@@ -25,12 +28,14 @@ powers = [
 with app.app_context():
     fake = Faker()
 
+    # Clear existing data
     HeroPower.query.delete()
     Hero.query.delete()
     Power.query.delete()
 
     heroes = []
 
+    # Populate Heroes
     for _ in range(50):
         new_hero = Hero(
             name=fake.name(),
@@ -44,6 +49,7 @@ with app.app_context():
 
     powers_list = []
 
+    # Populate Powers
     for power_name in powers:
         new_power = Power(
             name=power_name,
@@ -57,8 +63,8 @@ with app.app_context():
 
     heroes_powers = []
 
+    # Populate HeroPower relationships
     for _ in range(50):
-
         strengths = ['Strong', 'Weak', 'Average']
 
         new_hero_power = HeroPower(
