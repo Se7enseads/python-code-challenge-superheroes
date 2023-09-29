@@ -27,6 +27,18 @@ class Power(db.Model):
 
     hero_powers = db.relationship('HeroPower', back_populates='power')
 
+    @validates('description')
+    def description_validation(self, key, description):
+
+        descriptions = db.session.query(Power.description).all()
+
+        if description not in descriptions:
+            raise ValueError('Power must have a description')
+        if len(description) < 20:
+            raise ValueError('Description must me more than 20 characters')
+
+        return description
+
 
 class HeroPower(db.Model):
     __tablename__ = 'hero_powers'
@@ -41,3 +53,9 @@ class HeroPower(db.Model):
 
     hero = db.relationship('Hero', back_populates='hero_powers')
     power = db.relationship('Power', back_populates='hero_powers')
+
+    @validates('strength')
+    def strength_validation(self, key, strength):
+        if strength != 'Strong' or strength != 'Weak' or strength != 'Average':
+            raise ValueError("Strength must be either Strong, Weak or Average")
+        return strength
