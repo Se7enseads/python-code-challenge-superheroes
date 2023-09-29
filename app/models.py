@@ -29,10 +29,7 @@ class Power(db.Model):
 
     @validates('description')
     def description_validation(self, key, description):
-
-        descriptions = db.session.query(Power.description).all()
-
-        if description not in descriptions:
+        if not description:
             raise ValueError('Power must have a description')
         if len(description) < 20:
             raise ValueError('Description must me more than 20 characters')
@@ -47,7 +44,6 @@ class HeroPower(db.Model):
     strength = db.Column(db.String)
     hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'))
     power_id = db.Column(db.Integer, db.ForeignKey('powers.id'))
-    description = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
@@ -56,6 +52,6 @@ class HeroPower(db.Model):
 
     @validates('strength')
     def strength_validation(self, key, strength):
-        if strength != 'Strong' or strength != 'Weak' or strength != 'Average':
+        if strength not in ['Strong', 'Weak', 'Average']:
             raise ValueError("Strength must be either Strong, Weak or Average")
         return strength
