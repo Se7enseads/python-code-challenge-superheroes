@@ -63,7 +63,7 @@ with app.app_context():
 
         new_hero_power = HeroPower(
             hero_id=random.randint(1, 50),
-            power_id=random.randint(1, 50),
+            power_id=random.randint(1, 5),
             strength=random.choice(strengths)
         )
 
