@@ -5,7 +5,7 @@ This is a Flask application that provides an API for managing Heroes and Powers.
 from models import db, Hero, Power, HeroPower
 import os
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 
@@ -30,6 +30,9 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api = Api(app)
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("index.html")
 
 class Heroes(Resource):
     """
