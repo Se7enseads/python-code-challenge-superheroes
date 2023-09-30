@@ -1,21 +1,14 @@
 """
-Populates the database with random Hero, Power, and HeroPower data.
+Populate the database with random superhero data and their powers.
+
+This script clears existing data and populates the database with random heroes,
+powers, and their associations.
 """
 
 import random
 from faker import Faker
 from models import db, Hero, HeroPower, Power
-
 from app import app
-
-# List of hero names and powers
-hero_names = [
-    "Superhero1",
-    "Superhero2",
-    "Superhero3",
-    "Superhero4",
-    "Superhero5",
-]
 
 powers = [
     "Flight",
@@ -36,45 +29,59 @@ with app.app_context():
     heroes = []
 
     # Populate Heroes
-    for _ in range(50):
+    for _ in range(20):
+        # Generate random name and superhero name using Faker
         new_hero = Hero(
             name=fake.name(),
             super_name=fake.first_name(),
         )
         heroes.append(new_hero)
 
+    # Add heroes to the database
     db.session.add_all(heroes)
     db.session.commit()
-    print("Hero successfully populated")
+    print("🦸 Seeding heroes...")
 
     powers_list = []
 
     # Populate Powers
     for power_name in powers:
+        # Generate a description between 6 and 9 words for powers
+        num_words = random.randint(6, 9)
         new_power = Power(
             name=power_name,
-            description=fake.sentence()
+            description=fake.sentence(nb_words=num_words)
         )
         powers_list.append(new_power)
 
+    # Add powers to the database
     db.session.add_all(powers_list)
     db.session.commit()
-    print("Power successfully populated")
+    print("🦸 Adding powers to heroes...")
 
-    heroes_powers = []
+    hero_powers = []
 
-    # Populate HeroPower relationships
-    for _ in range(50):
+    for hero in heroes:
+        # Randomly choose the number of powers (between 1 and 5)
+        num_powers = random.randint(1, 5)
+
+        # Randomly select powers from the list
+        selected_powers = powers[:num_powers]
+
         strengths = ['Strong', 'Weak', 'Average']
 
-        new_hero_power = HeroPower(
-            hero_id=random.randint(1, 50),
-            power_id=random.randint(1, 5),
-            strength=random.choice(strengths)
-        )
+        for power_name in selected_powers:
+            # Find the power ID by name
+            power = Power.query.filter(Power.name == power_name).first()
 
-        heroes_powers.append(new_hero_power)
+            new_hero_power = HeroPower(
+                hero_id=hero.id,
+                power_id=power.id,
+                strength=random.choice(strengths)
+            )
+            hero_powers.append(new_hero_power)
 
-    db.session.add_all(heroes_powers)
+    # Add HeroPower relationships to the database
+    db.session.add_all(hero_powers)
     db.session.commit()
-    print("Hero Power successfully populated")
+    print("🦸 Done seeding!")
