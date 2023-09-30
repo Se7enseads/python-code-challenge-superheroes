@@ -30,6 +30,8 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api = Api(app)
 
+CORS(app)
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template("index.html")
