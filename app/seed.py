@@ -46,8 +46,8 @@ with app.app_context():
 
     # Populate Powers
     for power_name in powers:
-        # Generate a description between 6 and 9 words for powers
-        num_words = random.randint(6, 9)
+        # Generate a description between 10 and 12 words for powers
+        num_words = random.randint(10, 12)
         new_power = Power(
             name=power_name,
             description=fake.sentence(nb_words=num_words)
