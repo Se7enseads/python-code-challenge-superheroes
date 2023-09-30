@@ -10,7 +10,7 @@ function Power() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`/powers/${id}`).then((r) => {
+    fetch(`http://localhost:8000/powers/${id}`).then((r) => {
       if (r.ok) {
         r.json().then((power) =>
           setPower({ data: power, error: null, status: "resolved" })
@@ -24,7 +24,7 @@ function Power() {
   }, [id]);
 
   if (status === "pending") return <h1>Loading...</h1>;
-  if (status === "rejected") return <h1>Error: {error.error}</h1>;
+  if (status === "rejected") return <h1>Error: {error}</h1>;
 
   return (
     <section>

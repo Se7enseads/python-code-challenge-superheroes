@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function HeroPowerForm() {
   const [heroes, setHeroes] = useState([]);
@@ -8,16 +8,17 @@ function HeroPowerForm() {
   const [powerId, setPowerId] = useState("");
   const [strength, setStrength] = useState("");
   const [formErrors, setFormErrors] = useState([]);
-  const history = useHistory();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/heroes")
+    fetch("http://localhost:8000/heroes")
       .then((r) => r.json())
       .then(setHeroes);
   }, []);
 
   useEffect(() => {
-    fetch("/powers")
+    fetch("http://localhost:8000/powers")
       .then((r) => r.json())
       .then(setPowers);
   }, []);
@@ -29,7 +30,7 @@ function HeroPowerForm() {
       power_id: powerId,
       strength,
     };
-    fetch("/hero_powers", {
+    fetch("http://localhost:8000/hero_powers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +38,7 @@ function HeroPowerForm() {
       body: JSON.stringify(formData),
     }).then((r) => {
       if (r.ok) {
-        history.push(`/heroes/${heroId}`);
+        navigate(`/heroes/${heroId}`);
       } else {
         r.json().then((err) => setFormErrors(err.errors));
       }
