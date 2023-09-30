@@ -10,7 +10,7 @@ function Hero() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:8000/heroes/${id}`).then((r) => {
+    fetch(`/heroes/${id}`).then((r) => {
       if (r.ok) {
         r.json().then((hero) =>
           setHero({ data: hero, error: null, status: "resolved" })

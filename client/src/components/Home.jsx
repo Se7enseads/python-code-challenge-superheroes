@@ -5,7 +5,7 @@ function Home() {
   const [heroes, setHeroes] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/heroes")
+    fetch("/heroes")
       .then((r) => {
         if (!r.ok) {
           throw new Error("Network response was not ok");

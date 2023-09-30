@@ -10,7 +10,7 @@ function Power() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:8000/powers/${id}`).then((r) => {
+    fetch(`/powers/${id}`).then((r) => {
       if (r.ok) {
         r.json().then((power) =>
           setPower({ data: power, error: null, status: "resolved" })

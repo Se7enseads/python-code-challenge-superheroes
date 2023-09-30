@@ -12,13 +12,13 @@ function HeroPowerForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8000/heroes")
+    fetch("/heroes")
       .then((r) => r.json())
       .then(setHeroes);
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8000/powers")
+    fetch("/powers")
       .then((r) => r.json())
       .then(setPowers);
   }, []);
@@ -30,7 +30,7 @@ function HeroPowerForm() {
       power_id: powerId,
       strength,
     };
-    fetch("http://localhost:8000/hero_powers", {
+    fetch("/hero_powers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
