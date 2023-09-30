@@ -3,7 +3,7 @@ This is a Flask application that provides an API for managing Heroes and Powers.
 """
 
 from models import db, Hero, Power, HeroPower
-# import os
+import os
 
 from flask import Flask, request
 from flask_migrate import Migrate
@@ -21,8 +21,7 @@ app = Flask(
     template_folder='../client/build'
 )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///app.db"
-# os.getenv('DATABASE_URI)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
